@@ -8,6 +8,7 @@ coverage
 ormconfig.json
 dist
 package-lock.json
+.docker/dbdata
 
 uploads/*
 !uploads/.gitkeep
