@@ -8,8 +8,4 @@ class AppError {
   }
 }
 
-// const AppError = (message: string, statusCode: number): void => {
-
-// }
-
 export default AppError;
