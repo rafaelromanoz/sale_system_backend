@@ -10,12 +10,21 @@ interface IRequest {
 }
 
 class CreateUserService {
-  public async execute({ name, email, password }: IRequest): Promise<User> {
+  public async execute({
+    name,
+    email,
+    password,
+  }: IRequest): Promise<User | unknown> {
     const usersRepository = getCustomRepository(UsersRepository);
     const emailExists = await usersRepository.findByEmail(email);
 
     if (emailExists) {
-      throw new AppError('There is a user with this email');
+      return {
+        error: {
+          message: 'This product alread existst',
+          errorCode: 400,
+        },
+      };
     }
     const user = usersRepository.create({
       name,
