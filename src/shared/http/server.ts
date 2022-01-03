@@ -1,10 +1,9 @@
 import 'reflect-metadata';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import 'express-async-errors';
 import { errors } from 'celebrate';
 import cors from 'cors';
 import routes from '../routes/index';
-import AppError from '@shared/errors/AppError';
 import '@shared/typeorm';
 import appError from '@shared/errors/AppError';
 const app = express();
