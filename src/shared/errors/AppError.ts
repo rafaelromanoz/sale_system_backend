@@ -7,19 +7,19 @@
 //   }
 // }
 
-interface IError {
-  error: {
-    errorCode: number;
-    message: string;
-  };
-}
+// interface IError {
+//   error: {
+//     errorCode: number;
+//     message: string;
+//   };
+// }
 
-import { Request, Response } from 'express';
+// import { Request, Response } from 'express';
 
-const appError = (err: IError, req: Request, res: Response) => {
-  if (err) {
-    return res.status(err.error.errorCode).json(err.error.message);
-  }
-};
+// const appError = (err: IError, req: Request, res: Response) => {
+//   if (err) {
+//     return res.status(err.error.errorCode).json(err.error.message);
+//   }
+// };
 
-export default appError;
+// export default appError;

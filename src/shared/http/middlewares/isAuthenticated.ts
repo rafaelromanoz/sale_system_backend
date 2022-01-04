@@ -5,36 +5,38 @@ import authConfig from '@config/auth';
 interface IReturn {
   error: {
     message: string;
-    statusCode: number;
+    errorCode: number;
   };
+}
+
+interface TokenPayload {
+  sub: string;
 }
 
 export default function isAuthenticated(
   req: Request,
   res: Response,
   next: NextFunction,
-): IReturn {
+): IReturn | void {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return {
-      error: {
-        message: 'Jwt token is missing',
-        statusCode: 400,
-      },
-    };
+    throw new Error('deu errado o token');
   }
+
   const [, token] = authHeader.split(' ');
 
   try {
-    const decodeToken = verify(token, authConfig.jwt.secret);
-
+    const { sub } = verify(token, authConfig.jwt.secret) as TokenPayload;
+    req.user = {
+      id: sub,
+    };
     return next();
   } catch (error) {
     return {
       error: {
         message: 'Invalid jwt token.',
-        statusCode: 400,
+        errorCode: 400,
       },
     };
   }
