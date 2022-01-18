@@ -1,3 +1,4 @@
+import createErrorMessage from 'src/utils/functions';
 import { getCustomRepository } from 'typeorm';
 import UsersRepository from '../typeorm/repositories/UserRepository';
 import UserTokensRepository from '../typeorm/repositories/UserTokensRepository';
@@ -14,12 +15,10 @@ class SendForgotPasswordEmailService {
     const user = await usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new Error('User does not exists');
+      throw createErrorMessage(404, 'User dont exists');
     }
 
     const token = await userTokensRepository.gererate(user.id);
-
-    console.log(token);
   }
 }
 

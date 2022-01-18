@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import authConfig from '@config/auth';
+import createErrorMessage from 'src/utils/functions';
 
 interface IReturn {
   error: {
@@ -18,16 +19,17 @@ export default function isAuthenticated(
   res: Response,
   next: NextFunction,
 ): IReturn | void {
-  const authHeader = req.headers.authorization;
+  const { authorization } = req.headers;
 
-  if (!authHeader) {
-    throw new Error('deu errado o token');
+  if (!authorization) {
+    throw createErrorMessage(400, 'É necessário um token');
   }
 
-  const [, token] = authHeader.split(' ');
-
   try {
-    const { sub } = verify(token, authConfig.jwt.secret) as TokenPayload;
+    const { sub } = verify(
+      authorization,
+      authConfig.jwt.secret,
+    ) as TokenPayload;
     req.user = {
       id: sub,
     };

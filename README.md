@@ -18,9 +18,6 @@ Esse projeto foi desenvolvido com intuito de reforçar os estudos em Back-end ut
 <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="postgres">
 </span>
 <span>
-<img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="postgres">
-</span>
-<span>
 <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" alt="docker">
 </span>
 <span>
