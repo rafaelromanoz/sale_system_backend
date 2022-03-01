@@ -37,6 +37,56 @@ class CreateOrderService {
         'Could not find any products with the given ids.',
       );
     }
+
+    const existsProductsids = existsProducts.map(product => product.id);
+
+    const checkInexistentProduct = products.filter(
+      product => !existsProductsids.includes(product.id),
+    );
+
+    if (checkInexistentProduct.length) {
+      throw createErrorMessage(
+        400,
+        `Could not find product ${checkInexistentProduct[0].id}`,
+      );
+    }
+
+    const quantityAvailable = products.filter(
+      product =>
+        existsProducts.filter(p => p.id === product.id)[0].quantity <
+        product.quantity,
+    );
+
+    if (quantityAvailable.length) {
+      throw createErrorMessage(
+        400,
+        `${quantityAvailable[0].quantity} is not available for ${quantityAvailable[0].id}`,
+      );
+    }
+
+    const serializedProducts = products.map(product => ({
+      product_id: product.id,
+      quantity: product.quantity,
+      price: existsProducts.filter(p => p.id === product.id)[0].price,
+    }));
+
+    const order = await ordersRepository.createOrder({
+      customer: customerExists,
+      products: serializedProducts,
+    });
+
+    const { order_products } = order;
+
+    const updatedProductQuantity = order_products.map(product => ({
+      id: product.product_id,
+      quantity:
+        existsProducts.filter(p => p.id === product.product_id)[0].quantity -
+        product.quantity,
+    }));
+
+    await productsRepository.save(updatedProductQuantity);
+
+    return order;
   }
 }
 
