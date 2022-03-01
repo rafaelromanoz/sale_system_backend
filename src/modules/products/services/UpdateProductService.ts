@@ -1,4 +1,5 @@
-import AppError from '@shared/errors/errorMiddleware';
+import RedisCache from '@shared/cache/RedisCache';
+import createErrorMessage from 'src/utils/functions';
 import { getCustomRepository } from 'typeorm';
 import Product from '../typeorm/entities/Product';
 import { ProductRepository } from '../typeorm/repositories/ProductsRepository';
@@ -20,13 +21,18 @@ class UpdateProductService {
     const product = await productsRepository.findOne(id);
 
     if (!product) {
-      throw new AppError('Product not found');
+      throw createErrorMessage(404, 'Product dont exist');
     }
 
     const productExists = await productsRepository.findByName(name);
     if (productExists && name !== product.name) {
-      throw new AppError('There is already one product with this name');
+      throw createErrorMessage(400, 'Product dont exist');
     }
+
+    const redisCache = new RedisCache();
+
+    await redisCache.invalidate('api-vendas-PRODUCT_LIST');
+
     product.name = name;
     product.price = price;
     product.quantity = quantity;
